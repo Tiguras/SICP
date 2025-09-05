@@ -1,0 +1,51 @@
+#lang sicp
+
+; I need to modify this to check the time for each prime, not the whole operation
+
+(define (square x)
+  (* x x))
+
+(define (smallest-divisor n)
+  (find-divisor n 2))
+
+(define (find-divisor n test-divisor)
+  (cond ((> (square test-divisor) n) n)
+        ((divides? test-divisor n) test-divisor)
+        (else (find-divisor n (+ test-divisor 1)))))
+
+(define (prime? n)
+  (= n (smallest-divisor n)))
+
+(define (divides? a b)
+  (= (remainder b a) 0))
+
+
+(define (timed-prime-test x y)
+  (newline)
+  (display x)
+  (display " to ")
+  (display y) (newline)
+  (start-prime-test x y 0 (runtime)))
+
+(define (start-prime-test x y count start-time)
+  (if (search-for-primes x y count)
+      (report-prime (- (runtime) start-time))))
+
+(define (report-prime elapsed-time)
+  (display " *** ")
+  (display elapsed-time))
+
+(define (search-for-primes x y count)
+  (cond  ((> x y))
+         ((> count 2))
+         ((prime? x)
+         (display x)
+         (newline)
+         (search-for-primes (+ x 2) y (+ count 1)))
+        ((divides? 2 x) (search-for-primes (+ x 1) y count))
+        (else (search-for-primes (+ x 2) y count))))
+
+
+(timed-prime-test 1000000 888888888888)
+        
+        
